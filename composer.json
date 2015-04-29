@@ -1,0 +1,28 @@
+{
+    "name": "teamteatime/laravel-filer",
+    "description": "A simple Laravel ORM file attachment solution supporting multiple relationship types",
+    "keywords": ["laravel", "laravel-5", "files", "attachments"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Riari",
+            "email": "hello@ricko.me"
+        },
+        {
+            "name": "NeeHi",
+            "email": "nick.snape@hotmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "classmap": [
+            "src/migrations"
+        ],
+        "psr-0": {
+            "TeamTeaTime\\Filer\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
