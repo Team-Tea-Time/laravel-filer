@@ -6,16 +6,16 @@ abstract class BaseRepository
     protected $model;
     protected $perPage;
 
-    public function byID($id)
+    public function getByID($id)
     {
-        $this->model = $this->model->where('id', '=', $id);
+        $this->model = $this->model->findOrFail($id);
         return $this;
     }
 
     public function get($options = array())
     {
         $options += [
-            'paginated'     => true
+            'paginated'     => false
         ];
 
         if ($options['paginated'])

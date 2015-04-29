@@ -2,7 +2,8 @@
 
 use App;
 
-class LocalFileController extends BaseController {
+class LocalFileController extends BaseController
+{
 
     public function __construct()
     {
@@ -11,7 +12,7 @@ class LocalFileController extends BaseController {
 
     public function download($fid)
     {
-        $file = $this->repository->byID($fid);
+        $file = $this->repository->getByID($fid);
         return response()->download($file->absolutePath);
     }
 

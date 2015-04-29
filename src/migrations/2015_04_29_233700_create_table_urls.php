@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableLocalFiles extends Migration
+class CreateTableURLs extends Migration
 {
 
     /**
@@ -13,13 +13,11 @@ class CreateTableLocalFiles extends Migration
      */
     public function up()
     {
-        Schema::create('filer_local_files', function(Blueprint $table)
+        Schema::create('filer_urls', function(Blueprint $table)
         {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
-            $table->string('filename');
-            $table->string('path');
-            $table->string('mimetype');
+            $table->string('url');
             $table->timestamps();
         });
     }
@@ -31,7 +29,7 @@ class CreateTableLocalFiles extends Migration
      */
     public function down()
     {
-        Schema::drop('local_files');
+        Schema::drop('urls');
     }
 
 }

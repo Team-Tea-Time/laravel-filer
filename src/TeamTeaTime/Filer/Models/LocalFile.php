@@ -6,9 +6,10 @@ class LocalFile extends Eloquent
 {
 
     // Eloquent properties
-    protected $table      = 'local_files';
+    protected $table      = 'filer_local_files';
     public    $timestamps = true;
     protected $appends    = [];
+    protected $fillable   = ['user_id', 'filename', 'path', 'mimetype'];
 
     /*
     |--------------------------------------------------------------------------
