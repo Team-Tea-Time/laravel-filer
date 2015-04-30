@@ -82,14 +82,12 @@ trait AttachableTrait
                 break;
         }
 
-        print "Key: $key, type: " . get_class($attachment);
-
         // Find or create the attachment
         $attach = Attachment::firstOrCreate([
             'user_id'           => $user->id,
             'attachment_type'   => get_class($attachment),
             'attachment_id'     => $attachment->id,
-            'attachment_key'    => $key
+            'attachable_key'    => $key
         ]);
 
         $this->attachments()->save($attach);

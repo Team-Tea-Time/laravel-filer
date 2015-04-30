@@ -8,7 +8,7 @@ class Attachment extends Eloquent
     // Eloquent properties
     protected $table      = 'filer_attachments';
     public    $timestamps = true;
-    protected $fillable   = ['user_id', 'attachment_type', 'attachment_id', 'attachment_key'];
+    protected $fillable   = ['user_id', 'attachment_type', 'attachment_id', 'attachable_key'];
 
     /*
     |--------------------------------------------------------------------------
