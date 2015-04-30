@@ -22,6 +22,7 @@ class FilerServiceProvider extends ServiceProvider
     */
     public function boot()
     {
+        // Publish migrations and config
         $this->publishes([
             __DIR__.'/../../migrations/' => base_path('/database/migrations')
         ], 'migrations');
@@ -29,6 +30,19 @@ class FilerServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../../config/filer.php' => config_path('filer.php')
         ], 'config');
+
+        // Routes
+        $routeConfig = [
+            'namespace' => 'TeamTeaTime\Filer\Controllers',
+            'prefix'    => 'files',
+        ];
+
+        $this->app['router']->group($routeConfig, function($router) {
+            $router->get('{id}/download', [
+                'as'    => 'filer.file.download',
+                'uses'  => 'LocalFileController@download'
+            ]);
+        });
     }
 
 }

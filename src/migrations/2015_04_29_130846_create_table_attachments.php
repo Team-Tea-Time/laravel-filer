@@ -17,13 +17,13 @@ class CreateTableAttachments extends Migration
         {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
-            $table->string('title');
-            $table->string('description');
-            $table->string('attachment_type');
-            $table->string('attachment_id');
-            $table->string('attachable_type')->nullable();
-            $table->integer('attachable_id')->unsigned()->nullable();
-            $table->string('attachable_key')->nullable();
+            $table->string('title')->nullable();
+            $table->string('description')->nullable();
+            $table->string('model_type')->nullable();
+            $table->integer('model_id')->unsigned()->nullable();
+            $table->string('model_key')->nullable();
+            $table->string('attachment_type')->nullable();
+            $table->integer('attachment_id')->unsigned()->nullable();
             $table->timestamps();
         });
     }
@@ -35,7 +35,7 @@ class CreateTableAttachments extends Migration
      */
     public function down()
     {
-        Schema::drop('attachments');
+        Schema::drop('filer_attachments');
     }
 
 }

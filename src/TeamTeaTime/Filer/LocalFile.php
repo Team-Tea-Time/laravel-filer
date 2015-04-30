@@ -1,15 +1,12 @@
-<?php namespace TeamTeaTime\Filer\Models;
+<?php namespace TeamTeaTime\Filer;
 
-use Eloquent;
-
-class LocalFile extends Eloquent
+class LocalFile extends BaseItem
 {
 
     // Eloquent properties
     protected $table      = 'filer_local_files';
     public    $timestamps = true;
-    protected $appends    = [];
-    protected $fillable   = ['user_id', 'filename', 'path', 'mimetype'];
+    protected $fillable   = ['user_id', 'filename', 'path', 'mimetype', 'size'];
 
     /*
     |--------------------------------------------------------------------------
@@ -17,7 +14,7 @@ class LocalFile extends Eloquent
     |--------------------------------------------------------------------------
     */
 
-    public function getAbsolutePathAttribute()
+    public function getURLAttribute()
     {
         return "{$this->path}/{$this->filename}";
     }

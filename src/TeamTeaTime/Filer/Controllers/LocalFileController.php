@@ -1,19 +1,15 @@
 <?php namespace TeamTeaTime\Filer\Controllers;
 
-use App;
+use Illuminate\Routing\Controller;
+use TeamTeaTime\Filer\LocalFile;
 
-class LocalFileController extends BaseController
+class LocalFileController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->repository = App::make('TeamTeaTime\Filer\Repositories\LocalFile');
-    }
 
     public function download($fid)
     {
-        $file = $this->repository->getByID($fid);
-        return response()->download($file->absolutePath);
+        $file = LocalFile::findOrFail($fid);
+        return response()->download($file->URL);
     }
 
 }

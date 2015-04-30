@@ -20,6 +20,7 @@ class CreateTableLocalFiles extends Migration
             $table->string('filename');
             $table->string('path');
             $table->string('mimetype');
+            $table->integer('size');
             $table->timestamps();
         });
     }
@@ -31,7 +32,7 @@ class CreateTableLocalFiles extends Migration
      */
     public function down()
     {
-        Schema::drop('local_files');
+        Schema::drop('filer_local_files');
     }
 
 }

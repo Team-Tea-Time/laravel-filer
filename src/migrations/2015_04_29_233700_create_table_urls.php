@@ -29,7 +29,7 @@ class CreateTableURLs extends Migration
      */
     public function down()
     {
-        Schema::drop('urls');
+        Schema::drop('filer_urls');
     }
 
 }
