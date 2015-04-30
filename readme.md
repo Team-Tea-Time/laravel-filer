@@ -74,7 +74,7 @@ You can also give the attachment a title and description:
 $article->attach('uploads/event2015.pdf', '', "Event 2015 Guide", "The complete guide for this year's event.")
 ```
 
-Depending on what you pass to this method, the item you're attaching will be stored as either a `LocalFile` or a `URL`. You can later call on attachments via the `attachments` relationship. Examples are provided below.
+Depending on what you pass to this method, the item will be stored as either a `TeamTeaTime\Filer\LocalFile` or a `TeamTeaTime\Filer\URL`. You can later call on attachments via the `attachments` relationship. Examples are provided below.
 
 ### Displaying a list of attachments in a view
 
@@ -97,23 +97,25 @@ $user->attachments()->where(['id' => $attachment_id])
 $user->attachments()->key('avatar')->first()
 ```
 
-### Accessing an attachment's type-specific properties
+### Accessing an attachment's properties and type-specific properties
 
 ```php
 $avatar = $user->attachments()->key('avatar')->first();
-$avatar->url;           // the relative URL to the file
-$avatar->downloadURL;   // the download URL to the file (returns a download response to the browser)
-$avatar->title;         // the attachment title, if any
-$avatar->description;   // the attachment description, if any
-$avatar->filename;      // the filename, with its extension
-$avatar->path;          // the path to the directory where the file exists
-$avatar->mimetype;      // the file's detected mimetype
-$avatar->size;          // the file size, in bytes
+$avatar->url;               // the URL to the file
+$avatar->title;             // the attachment title, if any
+$avatar->description;       // the attachment description, if any
+
+// If the attachment is a LocalFile...
+$avatar->downloadURL;       // the download URL to the file (returns a download response to the browser)
+$avatar->item->filename;    // the filename, with its extension
+$avatar->item->path;        // the path to the directory where the file exists
+$avatar->item->mimetype;    // the file's detected mimetype
+$avatar->item->size;        // the file size, in bytes
 ```
 
 ### Generating a download link
 
-You can use the `downloadURL` attribute as shown above, or construct the route using a file ID (note that this is not an attachment ID):
+You can use the `downloadURL` attribute as shown above, or construct the route using a file ID:
 
 ```php
 route('filer.file.download', $file_id)
