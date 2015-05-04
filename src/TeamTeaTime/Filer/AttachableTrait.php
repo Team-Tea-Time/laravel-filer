@@ -4,6 +4,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use TeamTeaTime\Filer\Attachment;
 use TeamTeaTime\Filer\LocalFile;
 use TeamTeaTime\Filer\URL;
+use TeamTeaTime\Filer\Utils;
 
 trait AttachableTrait
 {
@@ -37,7 +38,7 @@ trait AttachableTrait
         $user = $user_callback();
 
         // Determine the type
-        $type = $this->checkType($item);
+        $type = Utils::checkType($item);
 
         // Create the appropriate model for the item if it doesn't already exist
         $itemToAttach = NULL;
@@ -53,18 +54,18 @@ trait AttachableTrait
             case 'LocalFile':
                 if (is_file($item))
                 {
-                    $item = new File($item);
+                    $file = new File($item);
                 }
 
                 $itemToAttach = LocalFile::firstOrNew([
                     'user_id'   => $user->id,
-                    'filename'  => $item->getFilename(),
-                    'path'      => str_replace(config('filer.path.absolute'), '', $item->getPath())
+                    'filename'  => $file->getFilename(),
+                    'path'      => Utils::getRelativeFilepath($file)
                 ]);
 
                 $itemToAttach->fill([
-                    'mimetype'  => $item->getMimeType(),
-                    'size'      => $item->getSize()
+                    'mimetype'  => $file->getMimeType(),
+                    'size'      => $file->getSize()
                 ]);
                 $itemToAttach->save();
 
@@ -88,41 +89,6 @@ trait AttachableTrait
         $itemToAttach->attachment()->save($attach);
 
         return $attach;
-    }
-
-    /**
-     * Attempts to determine what the given item is between a local filepath, a
-     * local file object or a URL.
-     *
-     * @param   $item           The item to check.
-     *          mixed
-     *
-     * @return  string if check successful. An exception is thrown if it fails.
-     */
-    private function checkType($item)
-    {
-        if (is_string($item))
-        {
-            // Item is a string; check to see if it's a URL
-            if (filter_var($item, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED))
-            {
-                // Item is a URL
-                return 'URL';
-            }
-            elseif (is_file($item))
-            {
-                // Item is a filepath
-                return 'LocalFile';
-            }
-        }
-        elseif (is_a($item, 'SplFileInfo'))
-        {
-            // Item is a file object
-            return 'LocalFile';
-        }
-
-        // Throw an exception if item doesn't match any known types
-        throw new Exception('Unknown item type');
     }
 
 }

@@ -48,10 +48,10 @@ class Attachment extends Eloquent
     {
         if (config('filer.append_query_string'))
         {
-            return "{$this->attachment->url}?v={$this->updated_at->timestamp}";
+            return "{$this->attachment->URL}?v={$this->updated_at->timestamp}";
         }
 
-        return $this->attachment->url;
+        return $this->attachment->URL;
     }
 
     public function getDownloadURLAttribute()

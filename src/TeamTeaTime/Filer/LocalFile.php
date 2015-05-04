@@ -16,7 +16,7 @@ class LocalFile extends BaseItem
 
     public function getURLAttribute()
     {
-        return "{$this->path}/{$this->filename}";
+        return config('filer.path.relative') . "{$this->path}/{$this->filename}";
     }
 
     public function getDownloadRouteAttribute()
