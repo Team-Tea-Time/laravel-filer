@@ -12,10 +12,10 @@ return [
 	|
 	*/
 
-    'path' => array(
+    'path' => [
         'relative' => 'uploads/',
         'absolute' => public_path() . '/uploads/'
-    ),
+    ],
 
     /*
 	|--------------------------------------------------------------------------
@@ -32,16 +32,19 @@ return [
 
 	/*
 	|--------------------------------------------------------------------------
-	| Current user
+	| User
 	|--------------------------------------------------------------------------
 	|
-	| Closure to return the current user. This is used to set the owner of an
-    | attachment.
+	| The name of your app's User model, and a closure to return the user ID.
+    | These are used to associate attachments with users.
 	|
 	*/
 
-	'current_user' => function() {
-		return Auth::user();
-	},
+	'user' => [
+        'model' => 'App\User',
+        'id'    => function() {
+    		return (Auth::check()) ? Auth::user()->id : 0;
+    	}
+    ]
 
 ];

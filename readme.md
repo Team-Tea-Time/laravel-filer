@@ -51,27 +51,43 @@ Filer requires no configuration out of the box in most cases, but the following 
 Option | Type | Description | Default
 ------ | ---- | ----------- | -------
 path | Array | Contains the relative and absolute paths to the directory where your attachment files are stored. | uploads
-current_user | Closure | Returns your app's current user object. This is used to associate attachments with their owners. | Auth::user()
 append_querystring | Boolean | If enabled, attachment URLs include a querystring containing the attachment's updated_at timestamp. This prevents out of date attachments from being loaded by the browser. | true
+user | Array | The name of your app's User model, and a closure to return the user ID. These are used to associate attachments with users. | Auth::user()->id or 0
 
 ## Usage
 
-To attach a file or URL, use the `attach()` method on your model. This method will accept a **local file path**, an instance of **SplFileInfo** (or `Symfony\Component\HttpFoundation\File\File`) or a **URL**.
+To attach a file or URL, use the `attach()` method on your model. This method will accept any of the following:
 
+...a **local file path**
 ```php
-$user->attach('uploads/avatars/1.jpg')
+$user->attach('uploads/avatars/1.jpg');
 ```
 
-Optionally, you can specify a key. Keys can be used to identify an attachment or create sub-sets of attachments using a custom string.
-
+...an instance of **SplFileInfo** (or `Symfony\Component\HttpFoundation\File\File`)
 ```php
-$user->attach('uploads/avatars/1.jpg', 'avatar')
+$photo = Request::file('photo')->move($destinationPath);
+$user->attach($photo);
 ```
 
-You can also give the attachment a title and description:
+...or a **URL**
+```php
+$user->attach('http://www.analysis.im/uploads/seminar/pdf-sample.pdf');
+```
+
+You can also specify a key, title, and/or description using the options array:
 
 ```php
-$article->attach('uploads/event2015.pdf', '', "Event 2015 Guide", "The complete guide for this year's event.")
+$user->attach('uploads/avatars/1.jpg', ['key' => 'avatar']);
+```
+
+```php
+$article->attach($pdf, ['title' => "Event 2015 Guide", 'description' => "The complete guide for this year's event."]);
+```
+
+By default, attachments are associated with user IDs using the closure specified in the `filer.user.id` config option. You can override this config option to return any integer, or override the value used at call time:
+
+```php
+$user->attach($photo, ['user_id' => $user->id]);
 ```
 
 Depending on what you pass to this method, the item will be stored as either a `TeamTeaTime\Filer\LocalFile` or a `TeamTeaTime\Filer\URL`. You can later call on attachments via the `attachments` relationship. Examples are provided below.
@@ -88,13 +104,13 @@ Depending on what you pass to this method, the item will be stored as either a `
 ### Retrieving a specific attachment
 
 ```php
-$user->attachments()->where(['id' => $attachment_id])
+$user->attachments()->find($attachment_id);
 ```
 
 ### Retrieving an attachment by key
 
 ```php
-$user->attachments()->key('avatar')->first()
+$user->attachments()->key('avatar')->first();
 ```
 
 ### Accessing an attachment's properties and type-specific properties
@@ -106,7 +122,7 @@ $avatar->title;             // the attachment title, if any
 $avatar->description;       // the attachment description, if any
 
 // If the attachment is a LocalFile...
-$avatar->downloadURL;       // the download URL to the file (returns a download response to the browser)
+$avatar->downloadURL;       // the URL to download the file
 $avatar->item->filename;    // the filename, with its extension
 $avatar->item->path;        // the path to the directory where the file exists
 $avatar->item->mimetype;    // the file's detected mimetype

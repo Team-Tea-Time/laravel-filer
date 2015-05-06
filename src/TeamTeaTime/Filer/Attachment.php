@@ -17,6 +17,11 @@ class Attachment extends Eloquent
     |--------------------------------------------------------------------------
     */
 
+    public function user()
+    {
+        return $this->belongsTo(config('filer.user.model'), 'user_id');
+    }
+
     public function model()
     {
         return $this->morphTo();

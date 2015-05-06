@@ -21,21 +21,26 @@ trait AttachableTrait
      *          string          Symfony\Component\HttpFoundation\File\File
      *                          (SplFileInfo) instance or remote file URL
      *
-     * @param   $key            Optional key to help identify the attachment.
-     *          string
-     *
-     * @param   $title          Optional title.
-     *          string
-     *
-     * @param   $description    Optional description.
-     *          string
+     * @param   $options        Array of optional settings.
      *
      * @return  TeamTeaTime\Filer\Models\Attachment
      */
-    public function attach($item, $key = '', $title = '', $description = '')
+    public function attach($item, $options = array())
     {
-        $user_callback = config('filer.current_user');
-        $user = $user_callback();
+        // Merge in default options
+        $options += [
+            'key'           => '',
+            'title'         => '',
+            'description'   => '',
+            'user_id'       => 'callback'
+        ];
+
+        if ($options['user_id'] == 'callback') {
+            $userIDCallback = config('filer.user.id');
+            $userID = $userIDCallback();
+        } else {
+            $userID = $options['user_id'];
+        }
 
         // Determine the type
         $type = Utils::checkType($item);
@@ -46,7 +51,7 @@ trait AttachableTrait
         {
             case 'URL':
                 $itemToAttach = URL::firstOrCreate([
-                    'user_id'   => $user->id,
+                    'user_id'   => $userID,
                     'url'       => $item
                 ]);
 
@@ -58,7 +63,7 @@ trait AttachableTrait
                 }
 
                 $itemToAttach = LocalFile::firstOrNew([
-                    'user_id'   => $user->id,
+                    'user_id'  => $userID,
                     'filename'  => $file->getFilename(),
                     'path'      => Utils::getRelativeFilepath($file)
                 ]);
@@ -77,11 +82,21 @@ trait AttachableTrait
             return FALSE;
         }
 
-        // Find or create the attachment
-        $attach = Attachment::firstOrCreate([
-            'user_id'   => $user->id,
-            'model_key' => $key
+        // Create/update and save the attachment
+        $attach = Attachment::firstOrNew([
+            'user_id'   => $userID,
+            'model_key' => $options['key']
         ]);
+
+        if (!is_null($options['title'])) {
+            $attach->title = $options['title'];
+        }
+
+        if (!is_null($options['description'])) {
+            $attach->description = $options['description'];
+        }
+
+        $attach->save();
 
         // Save the current model to the attachment
         $this->attachments()->save($attach);
