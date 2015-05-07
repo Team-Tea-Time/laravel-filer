@@ -51,7 +51,6 @@ trait AttachableTrait
         {
             case 'URL':
                 $itemToAttach = URL::firstOrCreate([
-                    'user_id'   => $userID,
                     'url'       => $item
                 ]);
 
@@ -63,7 +62,6 @@ trait AttachableTrait
                 }
 
                 $itemToAttach = LocalFile::firstOrNew([
-                    'user_id'  => $userID,
                     'filename'  => $file->getFilename(),
                     'path'      => Utils::getRelativeFilepath($file)
                 ]);
@@ -72,6 +70,7 @@ trait AttachableTrait
                     'mimetype'  => $file->getMimeType(),
                     'size'      => $file->getSize()
                 ]);
+
                 $itemToAttach->save();
 
                 break;
@@ -85,6 +84,7 @@ trait AttachableTrait
         // Create/update and save the attachment
         $attach = Attachment::firstOrNew([
             'user_id'   => $userID,
+            'model_id'  => $this->id,
             'model_key' => $options['key']
         ]);
 

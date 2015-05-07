@@ -16,7 +16,6 @@ class CreateTableURLs extends Migration
         Schema::create('filer_urls', function(Blueprint $table)
         {
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
             $table->string('url');
             $table->timestamps();
         });

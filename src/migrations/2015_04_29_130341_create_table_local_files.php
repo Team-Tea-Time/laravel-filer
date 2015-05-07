@@ -16,7 +16,6 @@ class CreateTableLocalFiles extends Migration
         Schema::create('filer_local_files', function(Blueprint $table)
         {
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
             $table->string('filename');
             $table->string('path');
             $table->string('mimetype');
