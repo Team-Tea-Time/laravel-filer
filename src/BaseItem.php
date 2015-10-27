@@ -1,10 +1,11 @@
-<?php namespace TeamTeaTime\Filer;
+<?php
+
+namespace TeamTeaTime\Filer;
 
 use Eloquent;
 
 class BaseItem extends Eloquent
 {
-
     /*
     |--------------------------------------------------------------------------
     | Relationships
@@ -15,5 +16,4 @@ class BaseItem extends Eloquent
     {
         return $this->morphMany('TeamTeaTime\Filer\Attachment', 'attachment');
     }
-
 }

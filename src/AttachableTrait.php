@@ -1,4 +1,6 @@
-<?php namespace TeamTeaTime\Filer;
+<?php
+
+namespace TeamTeaTime\Filer;
 
 use Symfony\Component\HttpFoundation\File\File;
 use TeamTeaTime\Filer\Attachment;
@@ -8,7 +10,6 @@ use TeamTeaTime\Filer\Utils;
 
 trait AttachableTrait
 {
-
     public function attachments()
     {
         return $this->morphMany('TeamTeaTime\Filer\Attachment', 'model');
@@ -105,5 +106,4 @@ trait AttachableTrait
 
         return $attach;
     }
-
 }

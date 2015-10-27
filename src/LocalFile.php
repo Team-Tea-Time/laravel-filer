@@ -1,8 +1,9 @@
-<?php namespace TeamTeaTime\Filer;
+<?php
+
+namespace TeamTeaTime\Filer;
 
 class LocalFile extends BaseItem
 {
-
     // Eloquent properties
     protected $table      = 'filer_local_files';
     public    $timestamps = true;
@@ -23,5 +24,4 @@ class LocalFile extends BaseItem
     {
         return route('filer.file.download', $this->id);
     }
-
 }

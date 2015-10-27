@@ -1,10 +1,11 @@
-<?php namespace TeamTeaTime\Filer;
+<?php
+
+namespace TeamTeaTime\Filer;
 
 use Eloquent;
 
 class Attachment extends Eloquent
 {
-
     // Eloquent properties
     protected $table      = 'filer_attachments';
     public    $timestamps = true;
@@ -63,5 +64,4 @@ class Attachment extends Eloquent
     {
         return route('filer.file.download', $this->attachment->id);
     }
-
 }
