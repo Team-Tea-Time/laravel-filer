@@ -17,9 +17,6 @@
         "php": ">=5.4.0"
     },
     "autoload": {
-        "classmap": [
-            "src/migrations"
-        ],
         "psr-0": {
             "TeamTeaTime\\Filer\\": "src/"
         }
