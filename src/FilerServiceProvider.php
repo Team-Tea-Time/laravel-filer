@@ -2,6 +2,7 @@
 
 namespace TeamTeaTime\Filer;
 
+use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 
 class FilerServiceProvider extends ServiceProvider
