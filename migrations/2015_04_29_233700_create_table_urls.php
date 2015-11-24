@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableURLs extends Migration
+class CreateTableUrls extends Migration
 {
 
     /**
