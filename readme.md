@@ -60,7 +60,7 @@ To attach a file or URL, use the `attach()` method on your model. This method wi
 
 ...a **local file path**
 ```php
-$user->attach('uploads/avatars/1.jpg');
+$user->attach('uploads/avatars/1.jpg'); // path relative to your public directory
 ```
 
 ...an instance of **SplFileInfo** (or `Symfony\Component\HttpFoundation\File\File`)
