@@ -2,6 +2,8 @@
 
 namespace TeamTeaTime\Filer;
 
+use Exception;
+
 class Utils
 {
     /**
