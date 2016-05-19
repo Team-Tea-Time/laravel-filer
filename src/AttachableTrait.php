@@ -1,70 +1,59 @@
-<?php
+<?php namespace TeamTeaTime\Filer;
 
-namespace TeamTeaTime\Filer;
-
+use Auth;
 use Symfony\Component\HttpFoundation\File\File;
 use TeamTeaTime\Filer\Attachment;
+use TeamTeaTime\Filer\Filer;
 use TeamTeaTime\Filer\LocalFile;
-use TeamTeaTime\Filer\URL;
-use TeamTeaTime\Filer\Utils;
+use TeamTeaTime\Filer\Url;
 
 trait AttachableTrait
 {
+    /**
+     * Relationship: attachments
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
     public function attachments()
     {
-        return $this->morphMany('TeamTeaTime\Filer\Attachment', 'model');
+        return $this->morphMany(Attachment::class, 'model');
     }
 
     /**
-     * Attaches a file/link
+     * Attaches a file/link. $item can be a local file path (relative to config('filer.path.absolute')),
+     * Symfony\Component\HttpFoundation\File\File or SplFileInfo instance or a file URL.
      *
-     * @param   $file           Local file path (relative to filer.path),
-     *          string          Symfony\Component\HttpFoundation\File\File
-     *                          (SplFileInfo) instance or remote file URL
-     *
-     * @param   $options        Array of optional settings.
-     *
-     * @return  TeamTeaTime\Filer\Models\Attachment
+     * @param  string  $item
+     * @param  array  $options
+     * @return Attachment|bool
      */
-    public function attach($item, $options = array())
+    public function attach($item, array $options = [])
     {
         // Merge in default options
         $options += [
             'key'           => '',
             'title'         => '',
             'description'   => '',
-            'user_id'       => 'callback'
+            'user_id'       => Auth::id()
         ];
 
-        if ($options['user_id'] == 'callback') {
-            $userIDCallback = config('filer.user.id');
-            $userID = $userIDCallback();
-        } else {
-            $userID = $options['user_id'];
-        }
-
         // Determine the type
-        $type = Utils::checkType($item);
+        $type = Filer::checkType($item);
 
         // Create the appropriate model for the item if it doesn't already exist
-        $itemToAttach = NULL;
+        $itemToAttach = null;
         switch ($type)
         {
-            case 'URL':
-                $itemToAttach = URL::firstOrCreate([
-                    'url'       => $item
-                ]);
+            case 'Url':
+                $itemToAttach = Url::firstOrCreate(['url' => $item]);
 
                 break;
             case 'LocalFile':
-                if (is_file($item))
-                {
-                    $file = new File($item);
-                }
+                $file = new File(config('filer.path.absolute') . "/{$item}");
 
                 $itemToAttach = LocalFile::firstOrNew([
                     'filename'  => $file->getFilename(),
-                    'path'      => Utils::getRelativeFilepath($file)
+                    'path'      => Filer::getRelativeFilepath($file)
                 ]);
 
                 $itemToAttach->fill([
@@ -77,17 +66,21 @@ trait AttachableTrait
                 break;
         }
 
-        if (is_null($itemToAttach))
-        {
-            return FALSE;
+        if (is_null($itemToAttach)) {
+            return false;
         }
 
         // Create/update and save the attachment
-        $attach = Attachment::firstOrNew([
-            'user_id'   => $userID,
-            'model_id'  => $this->id,
-            'model_key' => $options['key']
-        ]);
+        $attributes = [
+            'user_id' => $options['user_id'],
+            'model_id' => $this->id
+        ];
+
+        if (!is_null($options['key'])) {
+            $attributes['model_key'] = $options['key'];
+        }
+
+        $attach = Attachment::firstOrNew($attributes);
 
         if (!is_null($options['title'])) {
             $attach->title = $options['title'];
@@ -101,6 +94,7 @@ trait AttachableTrait
 
         // Save the current model to the attachment
         $this->attachments()->save($attach);
+
         // Save the item to the attachment
         $itemToAttach->attachment()->save($attach);
 

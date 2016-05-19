@@ -1,11 +1,38 @@
-<?php
+<?php namespace TeamTeaTime\Filer;
 
-namespace TeamTeaTime\Filer;
-
-class URL extends BaseItem
+class Url extends BaseItem
 {
-    // Eloquent properties
-    protected $table      = 'filer_urls';
-    public    $timestamps = true;
-    protected $fillable   = ['user_id', 'url'];
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'filer_urls';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['user_id', 'url'];
+
+    /**
+     * Get the item's URL.
+     *
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * Get the item's download URL.
+     *
+     * @return string
+     */
+    public function getDownloadUrl()
+    {
+        return $this->url;
+    }
 }

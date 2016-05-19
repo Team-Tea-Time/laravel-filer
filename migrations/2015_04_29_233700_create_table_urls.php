@@ -5,7 +5,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateTableUrls extends Migration
 {
-
     /**
      * Run the migrations.
      *
@@ -30,5 +29,4 @@ class CreateTableUrls extends Migration
     {
         Schema::drop('filer_urls');
     }
-
 }

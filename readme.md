@@ -8,16 +8,16 @@ Please also be aware that this package **is not** designed to handle uploading, 
 
 ### Step 1: Install the package
 
-Add the package to your composer.json and run `composer update`:
+Install the package via Composer:
 
 ```
-"teamteatime/laravel-filer": "dev-master"
+composer require teamteatime/laravel-filer:dev-master
 ```
 
 Add the service provider to your `config/app.php`:
 
 ```php
-'TeamTeaTime\Filer\FilerServiceProvider',
+TeamTeaTime\Filer\FilerServiceProvider::class,
 ```
 
 > If your app defines a catch-all route, make sure you load this service provider before your app service providers.
@@ -50,9 +50,9 @@ Filer requires no configuration out of the box in most cases, but the following 
 
 Option | Type | Description | Default
 ------ | ---- | ----------- | -------
-path | Array | Contains the relative and absolute paths to the directory where your attachment files are stored. | uploads
+routes | Boolean | Determines whether or not to automatically define filer's routes. If you set this to `false`, you can optionally use `\TeamTeaTime\Filer\Filer::routes($router, $namespace)` in your routes.php. | true
+path | Array | Contains the relative and absolute paths to the directory where your attachment files are stored. | storage_path('uploads')
 append_querystring | Boolean | If enabled, attachment URLs include a querystring containing the attachment's updated_at timestamp. This prevents out of date attachments from being loaded by the browser. | true
-user | Array | The name of your app's User model, and a closure to return the user ID. These are used to associate attachments with users. | Auth::user()->id or 0
 
 ## Usage
 
@@ -60,7 +60,7 @@ To attach a file or URL, use the `attach()` method on your model. This method wi
 
 ...a **local file path**
 ```php
-$user->attach('uploads/avatars/1.jpg'); // path relative to your public directory
+$user->attach('avatars/1.jpg'); // path relative to your configured storage directory
 ```
 
 ...an instance of **SplFileInfo** (or `Symfony\Component\HttpFoundation\File\File`)
@@ -74,7 +74,7 @@ $user->attach($photo);
 $user->attach('http://www.analysis.im/uploads/seminar/pdf-sample.pdf');
 ```
 
-You can also specify a key, title, and/or description using the options array:
+You can also specify a key (which uniquely identifies the attachment), a title, and/or a description using the options array:
 
 ```php
 $user->attach('uploads/avatars/1.jpg', ['key' => 'avatar']);

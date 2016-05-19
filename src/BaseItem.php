@@ -1,19 +1,30 @@
-<?php
+<?php namespace TeamTeaTime\Filer;
 
-namespace TeamTeaTime\Filer;
+use Illuminate\Database\Eloquent\Model;
 
-use Eloquent;
-
-class BaseItem extends Eloquent
+abstract class BaseItem extends Model
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Relationships
-    |--------------------------------------------------------------------------
-    */
-
+    /**
+     * Relationship: attachment
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
     public function attachment()
     {
-        return $this->morphMany('TeamTeaTime\Filer\Attachment', 'attachment');
+        return $this->morphMany(Attachment::class, 'attachment');
     }
+
+    /**
+     * Get the item's URL.
+     *
+     * @return string
+     */
+    abstract public function getUrl();
+
+    /**
+     * Get the item's download URL.
+     *
+     * @return string
+     */
+    abstract public function getDownloadUrl();
 }

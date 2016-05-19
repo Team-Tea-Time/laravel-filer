@@ -5,7 +5,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateTableLocalFiles extends Migration
 {
-
     /**
      * Run the migrations.
      *
@@ -33,5 +32,4 @@ class CreateTableLocalFiles extends Migration
     {
         Schema::drop('filer_local_files');
     }
-
 }

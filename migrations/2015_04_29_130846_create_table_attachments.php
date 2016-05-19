@@ -5,7 +5,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateTableAttachments extends Migration
 {
-
     /**
      * Run the migrations.
      *
@@ -37,5 +36,4 @@ class CreateTableAttachments extends Migration
     {
         Schema::drop('filer_attachments');
     }
-
 }

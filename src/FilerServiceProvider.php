@@ -1,13 +1,10 @@
-<?php
-
-namespace TeamTeaTime\Filer;
+<?php namespace TeamTeaTime\Filer;
 
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 
 class FilerServiceProvider extends ServiceProvider
 {
-
     /**
     * Register the service provider.
     *
@@ -19,11 +16,11 @@ class FilerServiceProvider extends ServiceProvider
     }
 
     /**
-    * Bootstrap the application events.
-    *
-    * @param  Router  $router
-    * @return void
-    */
+     * Bootstrap the application events.
+     *
+     * @param  Router  $router
+     * @return void
+     */
     public function boot(Router $router)
     {
         // Publish migrations and config
@@ -36,12 +33,10 @@ class FilerServiceProvider extends ServiceProvider
         ], 'config');
 
         // Routes
-        $router->group(['namespace' => 'TeamTeaTime\Filer\Controllers', 'prefix' => 'files'], function ($router) {
-            $router->get('{id}/download', [
-                'as'    => 'filer.file.download',
-                'uses'  => 'LocalFileController@download'
-            ]);
-        });
+        if (config('filer.routes')) {
+            $router->group(['prefix' => 'filer/file', 'middleware' => 'web'], function ($router) {
+                Filer::routes($router);
+            });
+        }
     }
-
 }
