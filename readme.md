@@ -90,7 +90,7 @@ By default, attachments are associated with user IDs using the closure specified
 $user->attach($photo, ['user_id' => $user->id]);
 ```
 
-Depending on what you pass to this method, the item will be stored as either a `TeamTeaTime\Filer\LocalFile` or a `TeamTeaTime\Filer\URL`. You can later call on attachments via the `attachments` relationship. Examples are provided below.
+Depending on what you pass to this method, the item will be stored as either a `TeamTeaTime\Filer\LocalFile` or a `TeamTeaTime\Filer\Url`. You can later call on attachments via the `attachments` relationship. Examples are provided below.
 
 ### Displaying a list of attachments in a view
 
@@ -117,22 +117,33 @@ $user->attachments()->key('avatar')->first();
 
 ```php
 $avatar = $user->attachments()->key('avatar')->first();
-$avatar->url;               // the URL to the file
+$avatar->getUrl();          // the URL to the file
+$avatar->getDownloadUrl();  // the download URL to the file
 $avatar->title;             // the attachment title, if any
 $avatar->description;       // the attachment description, if any
 
 // If the attachment is a LocalFile...
-$avatar->downloadURL;       // the URL to download the file
-$avatar->item->filename;    // the filename, with its extension
-$avatar->item->path;        // the path to the directory where the file exists
-$avatar->item->mimetype;    // the file's detected mimetype
-$avatar->item->size;        // the file size, in bytes
+$avatar->attachment->filename;    // the filename, with its extension
+$avatar->attachment->path;        // the path to the directory where the file exists
+$avatar->attachment->mimetype;    // the file's detected MIME type
+$avatar->attachment->size;        // the file size, in bytes
+$avatar->attachment->getFile();   // the Symfony File representation of the file
 ```
 
-### Generating a download link
+### Generating links
 
-You can use the `downloadURL` attribute as shown above, or construct the route using a file ID:
+The `getUrl()` and `getDownloadUrl()` methods above will return different values based on the attachment type; if it's a
+local file, they will return the 'view' and 'download' routes respectively, otherwise they'll return the URL that was
+attached.
+
+For local files, the provided routes can be generated with a file ID:
 
 ```php
-route('filer.file.download', $file_id)
+route('filer.file.view', $fileId);
 ```
+
+```php
+route('filer.file.download', $fileId)
+```
+
+> Note that depending on the file's MIME type, the browser may begin a download with both of these routes.
