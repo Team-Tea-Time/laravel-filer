@@ -34,7 +34,7 @@ class FilerServiceProvider extends ServiceProvider
 
         // Routes
         if (config('filer.routes')) {
-            $router->group(['prefix' => 'filer/file', 'middleware' => 'web'], function ($router) {
+            $router->group(['prefix' => config('filer.route_prefix'), 'middleware' => 'web'], function ($router) {
                 Filer::routes($router);
             });
         }
