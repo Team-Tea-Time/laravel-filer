@@ -84,7 +84,7 @@ $user->attach('uploads/avatars/1.jpg', ['key' => 'avatar']);
 $article->attach($pdf, ['title' => "Event 2015 Guide", 'description' => "The complete guide for this year's event."]);
 ```
 
-By default, attachments are associated with user IDs using the closure specified in the `filer.user.id` config option. You can override this config option to return any integer, or override the value used at call time:
+By default, attachments are associated with user IDs using `Auth::id()`. You can override this at call time:
 
 ```php
 $user->attach($photo, ['user_id' => $user->id]);
