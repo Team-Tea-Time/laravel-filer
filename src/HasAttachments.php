@@ -7,7 +7,7 @@ use TeamTeaTime\Filer\Filer;
 use TeamTeaTime\Filer\LocalFile;
 use TeamTeaTime\Filer\Url;
 
-trait AttachableTrait
+trait HasAttachments
 {
     /**
      * Relationship: attachments
@@ -17,6 +17,17 @@ trait AttachableTrait
     public function attachments()
     {
         return $this->morphMany(Attachment::class, 'model');
+    }
+
+    /**
+     * Get an attachment by key.
+     *
+     * @param  string  $key
+     * @return Attachment
+     */
+    public function findAttachmentByKey($key)
+    {
+        return $this->attachments()->key($key)->first();
     }
 
     /**
@@ -42,27 +53,20 @@ trait AttachableTrait
 
         // Create the appropriate model for the item if it doesn't already exist
         $itemToAttach = null;
-        switch ($type)
-        {
-            case 'Url':
+        switch ($type) {
+            case Type::URL:
                 $itemToAttach = Url::firstOrCreate(['url' => $item]);
-
                 break;
-            case 'LocalFile':
-                $file = new File(config('filer.path.absolute') . "/{$item}");
-
+            case Type::FILEPATH:
+                $item = new File(config('filer.path.absolute') . "/{$item}");
+            case TYPE::FILE:
                 $itemToAttach = LocalFile::firstOrNew([
-                    'filename'  => $file->getFilename(),
-                    'path'      => Filer::getRelativeFilepath($file)
-                ]);
-
-                $itemToAttach->fill([
-                    'mimetype'  => $file->getMimeType(),
-                    'size'      => $file->getSize()
-                ]);
-
-                $itemToAttach->save();
-
+                    'filename'  => $item->getFilename(),
+                    'path'      => Filer::getRelativeFilepath($item)
+                ])->fill([
+                    'mimetype'  => $item->getMimeType(),
+                    'size'      => $item->getSize()
+                ])->save();
                 break;
         }
 

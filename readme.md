@@ -36,11 +36,11 @@ Run your migrations:
 
 ### Step 4: Update your models
 
-Add attachment support to your models by using AttachableTrait:
+Add attachment support to your models by using the HasAttachments trait:
 
 ```php
 class ... extends Eloquent {
-    use \TeamTeaTime\Filer\AttachableTrait;
+    use \TeamTeaTime\Filer\HasAttachments;
 }
 ```
 
@@ -96,29 +96,26 @@ Depending on what you pass to this method, the item will be stored as either a `
 
 ```
 @foreach ($article->attachments as $attachment)
-<a href="{{ $attachment->url }}">{{ $attachment->title }}</a>
+<a href="{{ $attachment->getDownloadUrl() }}">{{ $attachment->title }}</a>
 <p class="description">{{ $attachment->description }}</p>
 @endforeach
 ```
 
-### Retrieving a specific attachment
+### Retrieving an attachment by ID or key
 
 ```php
-$user->attachments()->find($attachment_id);
-```
-
-### Retrieving an attachment by key
+$user->attachments()->find($attachmentId);
 
 ```php
-$user->attachments()->key('avatar')->first();
+$user->findAttachmentByKey('avatar');
 ```
 
 ### Accessing an attachment's properties and type-specific properties
 
 ```php
-$avatar = $user->attachments()->key('avatar')->first();
-$avatar->getUrl();          // the URL to the file
-$avatar->getDownloadUrl();  // the download URL to the file
+$avatar = $user->findAttachmentByKey('avatar');
+$avatar->getUrl();          // the URL to the file (see below)
+$avatar->getDownloadUrl();  // the download URL to the file (see below)
 $avatar->title;             // the attachment title, if any
 $avatar->description;       // the attachment description, if any
 
@@ -130,11 +127,9 @@ $avatar->attachment->size;        // the file size, in bytes
 $avatar->attachment->getFile();   // the Symfony File representation of the file
 ```
 
-### Generating links
+### Generating URLs
 
-The `getUrl()` and `getDownloadUrl()` methods above will return different values based on the attachment type; if it's a
-local file, they will return the 'view' and 'download' routes respectively, otherwise they'll return the URL that was
-attached.
+The `getUrl()` and `getDownloadUrl()` methods above will return different values based on the attachment type; if it's a local file, they will return the 'view' and 'download' routes respectively, otherwise they'll return the URL that was attached.
 
 For local files, the provided routes can be generated with a file ID:
 

@@ -6,16 +6,6 @@ use Illuminate\Routing\Router;
 class Filer
 {
     /**
-     * @var string
-     */
-    const TYPE_URL = 'Url';
-
-    /**
-     * @var string
-     */
-    const TYPE_FILE = 'LocalFile';
-
-    /**
      * Define the standard routes.
      *
      * @param  Router  $router
@@ -50,14 +40,14 @@ class Filer
             // Item is a string; check to see if it's a URL or filepath
             if (filter_var($item, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED)) {
                 // Item is a URL
-                return self::TYPE_URL;
+                return Type::URL;
             } elseif (is_file(config('filer.path.absolute') . "/{$item}")) {
                 // Item is a filepath
-                return self::TYPE_FILE;
+                return Type::FILEPATH;
             }
         } elseif (is_a($item, 'SplFileInfo')) {
             // Item is a file object
-            return self::TYPE_FILE;
+            return Type::FILE;
         }
 
         // Throw an exception if item doesn't match any known types
