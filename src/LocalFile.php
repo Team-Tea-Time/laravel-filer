@@ -28,7 +28,11 @@ class LocalFile extends BaseItem
 
         if (config('filer.cleanup_on_delete')) {
             static::deleting(function ($file) {
-                unlink(config('filer.path.absolute') . "{$file->path}/{$file->filename}");
+                $path = config('filer.path.absolute') . "{$file->path}/{$file->filename}";
+
+                if (is_file($path)) {
+                    unlink($path);
+                }
             });
         }
     }
