@@ -4,9 +4,34 @@ use Symfony\Component\HttpFoundation\File\File;
 
 class LocalFile extends BaseItem
 {
-    protected $table      = 'filer_local_files';
-    public    $timestamps = true;
-    protected $fillable   = ['user_id', 'filename', 'path', 'mimetype', 'size'];
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'filer_local_files';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['filename', 'path', 'mimetype', 'size'];
+
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot() {
+        parent::boot();
+
+        if (config('filer.cleanup_on_delete')) {
+            static::deleting(function ($file) {
+                unlink(config('filer.path.absolute') . "{$file->path}/{$file->filename}");
+            });
+        }
+    }
 
     /**
      * Return a Symfony File representation of the file.
@@ -76,6 +101,6 @@ class LocalFile extends BaseItem
      */
     private function getPath($path)
     {
-        return $path . "{$this->path}/{$this->filename}";
+        return "{$path}{$this->path}/{$this->filename}";
     }
 }

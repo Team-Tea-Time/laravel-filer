@@ -14,7 +14,7 @@ class Url extends BaseItem
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'url'];
+    protected $fillable = ['url'];
 
     /**
      * Get the item's URL.

@@ -24,7 +24,7 @@ return [
     |
     */
 
-    'route_prefix' => 'filer/file',
+    'route_prefix' => 'files',
 
     /*
     |--------------------------------------------------------------------------
@@ -53,5 +53,17 @@ return [
     */
 
     'append_query_string' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Deletion Cleanup
+    |--------------------------------------------------------------------------
+    |
+    | Enable this to make Filer attempt deletion of local files when the
+    | attachments they're referenced from are deleted from the database.
+    |
+    */
+
+    'cleanup_on_delete' => true,
 
 ];

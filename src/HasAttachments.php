@@ -63,7 +63,8 @@ trait HasAttachments
                 $itemToAttach = LocalFile::firstOrNew([
                     'filename'  => $item->getFilename(),
                     'path'      => Filer::getRelativeFilepath($item)
-                ])->fill([
+                ]);
+                $itemToAttach->fill([
                     'mimetype'  => $item->getMimeType(),
                     'size'      => $item->getSize()
                 ])->save();
@@ -81,7 +82,7 @@ trait HasAttachments
         ];
 
         if (!is_null($options['key'])) {
-            $attributes['model_key'] = $options['key'];
+            $attributes['key'] = $options['key'];
         }
 
         $attach = Attachment::firstOrNew($attributes);

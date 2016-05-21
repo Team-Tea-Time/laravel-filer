@@ -20,7 +20,7 @@ class CreateTableAttachments extends Migration
             $table->string('description')->nullable();
             $table->string('model_type')->nullable();
             $table->integer('model_id')->unsigned()->nullable();
-            $table->string('model_key')->nullable();
+            $table->string('key')->nullable();
             $table->string('attachment_type')->nullable();
             $table->integer('attachment_id')->unsigned()->nullable();
             $table->timestamps();

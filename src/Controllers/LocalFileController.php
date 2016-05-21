@@ -1,6 +1,4 @@
-<?php
-
-namespace TeamTeaTime\Filer\Controllers;
+<?php namespace TeamTeaTime\Filer\Controllers;
 
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;

@@ -1,6 +1,7 @@
 <?php namespace TeamTeaTime\Filer;
 
 use Illuminate\Database\Eloquent\Model;
+use Storage;
 
 class Attachment extends Model
 {
@@ -16,7 +17,7 @@ class Attachment extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'model_key'];
+    protected $fillable = ['user_id', 'key'];
 
     /**
      * The relations to eager load on every query.
@@ -24,6 +25,19 @@ class Attachment extends Model
      * @var array
      */
     protected $with = ['model', 'attachment'];
+
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot() {
+        parent::boot();
+
+        static::deleting(function ($attachment) {
+            $attachment->attachment()->delete();
+        });
+    }
 
     /**
      * Relationship: user
@@ -64,7 +78,7 @@ class Attachment extends Model
      */
     public function scopeKey($query, $key)
     {
-        return $query->where('model_key', $key);
+        return $query->where('key', $key);
     }
 
     /**

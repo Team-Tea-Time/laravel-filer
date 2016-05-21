@@ -2,7 +2,7 @@
 
 If you encounter any issues or have a suggestion, please [create an issue](https://github.com/Team-Tea-Time/laravel-filer/issues/new).
 
-Please also be aware that this package **is not** designed to handle uploading, filesystem operations (such as move/delete) or image manipulation. It's simply designed to compliment other packages and tools that already exist in Laravel. If you're looking for a more feature-complete attachments solution, take a look at [CodeSleeve/stapler](https://github.com/CodeSleeve/stapler).
+Please also be aware that this package **is not** designed to handle uploading or image manipulation. It's simply designed to compliment other packages and tools that already exist in Laravel. If you're looking for a more feature-complete attachments solution, take a look at [CodeSleeve/stapler](https://github.com/CodeSleeve/stapler).
 
 ## Installation
 
@@ -51,8 +51,10 @@ Filer requires no configuration out of the box in most cases, but the following 
 Option | Type | Description | Default
 ------ | ---- | ----------- | -------
 routes | Boolean | Determines whether or not to automatically define filer's routes. If you set this to `false`, you can optionally use `\TeamTeaTime\Filer\Filer::routes($router, $namespace)` in your routes.php. | true
+route_prefix | string | If routes are enabled, this is used for all route prefixes. | files
 path | Array | Contains the relative and absolute paths to the directory where your attachment files are stored. | storage_path('uploads')
 append_querystring | Boolean | If enabled, attachment URLs include a querystring containing the attachment's updated_at timestamp. This prevents out of date attachments from being loaded by the browser. | true
+cleanup_on_delete | Boolean | If enabled, Filer will attempt to delete local files referenced by deleted attachments. | true 
 
 ## Usage
 
