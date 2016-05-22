@@ -1,5 +1,6 @@
 <?php namespace TeamTeaTime\Filer\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use TeamTeaTime\Filer\LocalFile;
@@ -15,8 +16,11 @@ class LocalFileController extends Controller
     public function view($id)
     {
         $file = LocalFile::findOrFail($id);
-        $response = new Response($file->getContents(), 200);
-        $response->header('Content-Type', $file->getFile()->getMimeType());
+        $response = (new Response($file->getContents(), 200))->withHeaders([
+            'Content-Type'  => $file->getFile()->getMimeType(),
+            'Cache-Control' => 'max-age=86400, public',
+            'Expires'       => Carbon::now()->addSeconds(86400)->format('D, d M Y H:i:s \G\M\T')
+        ]);
         return $response;
     }
 
