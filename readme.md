@@ -107,7 +107,7 @@ Depending on what you pass to this method, the item will be stored as either a `
 
 ```php
 $user->attachments()->find($attachmentId);
-
+```
 ```php
 $user->findAttachmentByKey('avatar');
 ```
