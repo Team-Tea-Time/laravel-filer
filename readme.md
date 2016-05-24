@@ -7,7 +7,7 @@ Please be aware that this package **is not** designed to handle uploading or ima
 Install the package via Composer:
 
 ```
-composer require teamteatime/laravel-filer:dev-master
+composer require teamteatime/laravel-filer
 ```
 
 Add the service provider to your `config/app.php`:
@@ -66,7 +66,7 @@ $user->attach('avatars/1.jpg'); // path relative to your configured storage dire
 $photo = Request::file('photo')->move($destinationPath);
 $user->attach($photo);
 ```
-> `Symfony\Component\HttpFoundation\File\File`, `Symfony\Component\HttpFoundation\File\UploadedFile` and `Illuminate\Http\UploadedFile` are extensions of `SplFileInfo` and Laravel Request objects contain the latter by default.
+> `Symfony\Component\HttpFoundation\File\File`, `Symfony\Component\HttpFoundation\File\UploadedFile` and `Illuminate\Http\UploadedFile` are extensions of `SplFileInfo` and Laravel Requests contain the latter by default.
 
 ...or a **URL**
 ```php
