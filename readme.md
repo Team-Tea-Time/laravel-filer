@@ -1,8 +1,4 @@
-**Note: this package is under active development. While it should be completely functional, caution is advised and you might wish to wait until the first release is pushed out. Until then, things are likely to change and possibly break as features are added or altered.**
-
-If you encounter any issues or have a suggestion, please [create an issue](https://github.com/Team-Tea-Time/laravel-filer/issues/new).
-
-Please also be aware that this package **is not** designed to handle uploading or image manipulation. It's simply designed to compliment other packages and tools that already exist in Laravel. If you're looking for a more feature-complete attachments solution, take a look at [CodeSleeve/stapler](https://github.com/CodeSleeve/stapler).
+Please be aware that this package **is not** designed to handle uploading or image manipulation. It's simply designed to compliment other packages and tools that already exist in Laravel. If you're looking for a more feature-complete attachments solution, take a look at [CodeSleeve/stapler](https://github.com/CodeSleeve/stapler).
 
 ## Installation
 
@@ -54,7 +50,7 @@ routes | Boolean | Determines whether or not to automatically define filer's rou
 route_prefix | string | If routes are enabled, this is used for all route prefixes. | files
 path | Array | Contains the relative and absolute paths to the directory where your attachment files are stored. | storage_path('uploads')
 append_querystring | Boolean | If enabled, attachment URLs include a querystring containing the attachment's updated_at timestamp. This prevents out of date attachments from being loaded by the browser. | true
-cleanup_on_delete | Boolean | If enabled, Filer will attempt to delete local files referenced by deleted attachments. | true 
+cleanup_on_delete | Boolean | If enabled, Filer will attempt to delete local files referenced by deleted attachments. | true
 
 ## Usage
 
@@ -65,11 +61,12 @@ To attach a file or URL, use the `attach()` method on your model. This method wi
 $user->attach('avatars/1.jpg'); // path relative to your configured storage directory
 ```
 
-...an instance of **SplFileInfo** (or `Symfony\Component\HttpFoundation\File\File`)
+...an instance of **SplFileInfo**
 ```php
 $photo = Request::file('photo')->move($destinationPath);
 $user->attach($photo);
 ```
+> `Symfony\Component\HttpFoundation\File\File`, `Symfony\Component\HttpFoundation\File\UploadedFile` and `Illuminate\Http\UploadedFile` are extensions of `SplFileInfo` and Laravel Request objects contain the latter by default.
 
 ...or a **URL**
 ```php
@@ -122,11 +119,11 @@ $avatar->title;             // the attachment title, if any
 $avatar->description;       // the attachment description, if any
 
 // If the attachment is a LocalFile...
-$avatar->attachment->filename;    // the filename, with its extension
-$avatar->attachment->path;        // the path to the directory where the file exists
-$avatar->attachment->mimetype;    // the file's detected MIME type
-$avatar->attachment->size;        // the file size, in bytes
-$avatar->attachment->getFile();   // the Symfony File representation of the file
+$avatar->item->filename;    // the filename, with its extension
+$avatar->item->path;        // the path to the directory where the file exists
+$avatar->item->mimetype;    // the file's detected MIME type
+$avatar->item->size;        // the file size, in bytes
+$avatar->item->getFile();   // the Symfony File representation of the file
 ```
 
 ### Generating URLs

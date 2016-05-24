@@ -24,7 +24,7 @@ class Attachment extends Model
      *
      * @var array
      */
-    protected $with = ['model', 'attachment'];
+    protected $with = ['model', 'item'];
 
     /**
      * The "booting" method of the model.
@@ -35,7 +35,7 @@ class Attachment extends Model
         parent::boot();
 
         static::deleting(function ($attachment) {
-            $attachment->attachment->delete();
+            $attachment->item->delete();
         });
     }
 
@@ -60,11 +60,11 @@ class Attachment extends Model
     }
 
     /**
-     * Relationship: attachment
+     * Relationship: item
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function attachment()
+    public function item()
     {
         return $this->morphTo();
     }
@@ -89,10 +89,10 @@ class Attachment extends Model
     public function getUrl()
     {
         if (config('filer.append_query_string')) {
-            return "{$this->attachment->getUrl()}?v={$this->updated_at->timestamp}";
+            return "{$this->item->getUrl()}?v={$this->updated_at->timestamp}";
         }
 
-        return $this->attachment->getUrl();
+        return $this->item->getUrl();
     }
 
     /**
@@ -102,6 +102,6 @@ class Attachment extends Model
      */
     public function getDownloadUrl()
     {
-        return $this->attachment->getDownloadUrl();
+        return $this->item->getDownloadUrl();
     }
 }

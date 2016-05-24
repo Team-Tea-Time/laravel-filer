@@ -11,7 +11,7 @@ abstract class BaseItem extends Model
      */
     public function attachment()
     {
-        return $this->morphMany(Attachment::class, 'attachment');
+        return $this->morphMany(Attachment::class, 'item');
     }
 
     /**

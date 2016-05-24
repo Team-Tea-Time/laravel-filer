@@ -85,24 +85,24 @@ trait HasAttachments
             $attributes['key'] = $options['key'];
         }
 
-        $attach = Attachment::firstOrNew($attributes);
+        $attachment = Attachment::firstOrNew($attributes);
 
         if (!is_null($options['title'])) {
-            $attach->title = $options['title'];
+            $attachment->title = $options['title'];
         }
 
         if (!is_null($options['description'])) {
-            $attach->description = $options['description'];
+            $attachment->description = $options['description'];
         }
 
-        $attach->save();
+        $attachment->save();
 
-        // Save the current model to the attachment
-        $this->attachments()->save($attach);
+        // Save the attachment to the model
+        $this->attachments()->save($attachment);
 
-        // Save the item to the attachment
-        $itemToAttach->attachment()->save($attach);
+        // Save the attachment to the item
+        $itemToAttach->attachment()->save($attachment);
 
-        return $attach;
+        return $attachment;
     }
 }
