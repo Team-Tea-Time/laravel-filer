@@ -59,7 +59,7 @@ trait HasAttachments
                 break;
             case Type::FILEPATH:
                 $item = new File(config('filer.path.absolute') . "/{$item}");
-            case TYPE::FILE:
+            case Type::FILE:
                 $itemToAttach = LocalFile::firstOrNew([
                     'filename'  => $item->getFilename(),
                     'path'      => Filer::getRelativeFilepath($item)
