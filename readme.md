@@ -89,6 +89,10 @@ By default, attachments are associated with user IDs using `Auth::id()`. You can
 $user->attach($photo, ['user_id' => $user->id]);
 ```
 
+```php
+$article->attach($pdf, ['user_id' => null]);
+```
+
 Depending on what you pass to this method, the item will be stored as either a `TeamTeaTime\Filer\LocalFile` or a `TeamTeaTime\Filer\Url`. You can later call on attachments via the `attachments` relationship. Examples are provided below.
 
 ### Displaying a list of attachments in a view
