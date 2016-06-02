@@ -14,7 +14,8 @@ class LocalFileController extends Controller
      */
     public function view($id)
     {
-        $file = LocalFile::findOrFail($id);
+        $file = LocalFile::getByIdentifier($id);
+
         $response = response($file->getContents(), 200)->withHeaders([
             'Content-Type'  => $file->getFile()->getMimeType(),
             'Cache-Control' => 'max-age=86400, public',
@@ -31,7 +32,7 @@ class LocalFileController extends Controller
      */
     public function download($id)
     {
-        $file = LocalFile::findOrFail($id);
+        $file = LocalFile::getByIdentifier($id);
         return response()->download($file->getAbsolutePath());
     }
 }

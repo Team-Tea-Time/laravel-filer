@@ -1,6 +1,7 @@
 <?php namespace TeamTeaTime\Filer;
 
 use Symfony\Component\HttpFoundation\File\File;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class LocalFile extends BaseItem
 {
@@ -35,6 +36,11 @@ class LocalFile extends BaseItem
                 }
             });
         }
+
+        // Whenever a new model is created in the database, we add a hash
+        static::creating(function($model) {
+            $model->hash = $model->makeHash();
+        });
     }
 
     /**
@@ -84,7 +90,7 @@ class LocalFile extends BaseItem
      */
     public function getUrl()
     {
-        return route('filer.file.view', $this->id);
+        return route('filer.file.view', $this->getIdentifier());
     }
 
     /**
@@ -94,7 +100,7 @@ class LocalFile extends BaseItem
      */
     public function getDownloadUrl()
     {
-        return route('filer.file.download', $this->id);
+        return route('filer.file.download', $this->getIdentifier());
     }
 
     /**
@@ -107,4 +113,50 @@ class LocalFile extends BaseItem
     {
         return "{$path}{$this->path}/{$this->filename}";
     }
+
+    /**
+     * Get the current identifier used for the routes.
+     *
+     * @return integer|string
+     */
+    public function getIdentifier()
+    {
+        if (config('filer.hash_routes')) {
+            return $this->hash;
+        }
+
+        return $this->id;
+    }
+
+    /**
+     * Get model by the current used identifier for the routes.
+     *
+     * @param  integer $id
+     * @return LocalFIle
+     */
+    public static function getByIdentifier($id)
+    {
+        if (config('filer.hash_routes')) {
+            $file = self::whereHash($id)->first();
+        } else {
+            $file = self::whereId($id)->first();
+        }
+
+        if (!$file) {
+            throw (new ModelNotFoundException)->setModel(LocalFile::class);
+        }
+
+        return $file;
+    }
+
+    /**
+     * Makes as hash for the file.
+     *
+     * @return string
+     */
+    public function makeHash()
+    {
+        return str_random(config('filer.hash_length', 40));
+    }
+
 }
