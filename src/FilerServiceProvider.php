@@ -23,7 +23,7 @@ class FilerServiceProvider extends ServiceProvider
      */
     public function boot(Router $router)
     {
-        // Publish migrations and config
+        // Publish migrations, config and seeders
         $this->publishes([
             __DIR__.'/../migrations/' => base_path('/database/migrations')
         ], 'migrations');
@@ -31,6 +31,10 @@ class FilerServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/filer.php' => config_path('filer.php')
         ], 'config');
+
+        $this->publishes([
+            __DIR__.'/../seeds/' => base_path('/database/seeds')
+        ], 'seeds');
 
         // Routes
         if (config('filer.routes')) {
