@@ -28,10 +28,10 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Hashed routes
+    | Route hashing
     |--------------------------------------------------------------------------
     |
-    | Hash the routes in order to ofuscate the attachments ids.
+    | Enables unique hashes for local files to obfuscate their IDs in routes.
     |
     */
 
@@ -39,10 +39,10 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Hash lenght
+    | Hash length
     |--------------------------------------------------------------------------
     |
-    | The length of the hash for the attachments.
+    | The length to use when generating hashes for local files.
     |
     */
 

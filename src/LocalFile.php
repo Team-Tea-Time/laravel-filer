@@ -1,7 +1,7 @@
 <?php namespace TeamTeaTime\Filer;
 
-use Symfony\Component\HttpFoundation\File\File;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpFoundation\File\File;
 
 class LocalFile extends BaseItem
 {
@@ -38,8 +38,8 @@ class LocalFile extends BaseItem
         }
 
         // Whenever a new model is created in the database, we add a hash
-        static::creating(function($model) {
-            $model->hash = $model->makeHash();
+        static::creating(function ($model) {
+            $model->hash = $model->generateHash();
         });
     }
 
@@ -115,48 +115,43 @@ class LocalFile extends BaseItem
     }
 
     /**
-     * Get the current identifier used for the routes.
+     * Get the unique identifier according to filer.hash_routes.
      *
      * @return integer|string
      */
     public function getIdentifier()
     {
-        if (config('filer.hash_routes')) {
-            return $this->hash;
-        }
-
-        return $this->id;
+        return config('filer.hash_routes') ? $this->hash : $this->id;
     }
 
     /**
-     * Get model by the current used identifier for the routes.
+     * Get a model instance using a unique identifier according to filer.hash_routes.
      *
-     * @param  integer $id
+     * @param  integer  $id
      * @return LocalFIle
      */
     public static function getByIdentifier($id)
     {
-        if (config('filer.hash_routes')) {
-            $file = self::whereHash($id)->first();
-        } else {
-            $file = self::whereId($id)->first();
-        }
+        $file = config('filer.hash_routes') ? static::whereHash($id)->first() : static::find($id);
 
         if (!$file) {
-            throw (new ModelNotFoundException)->setModel(LocalFile::class);
+            throw (new ModelNotFoundException)->setModel(static::class);
         }
 
         return $file;
     }
 
     /**
-     * Makes as hash for the file.
+     * Generate a unique hash for the file.
      *
      * @return string
      */
-    public function makeHash()
+    public function generateHash()
     {
-        return str_random(config('filer.hash_length', 40));
-    }
+        do {
+            $hash = str_random(config('filer.hash_length', 40));
+        } while (static::whereHash($hash)->first() instanceof LocalFile);
 
+        return $hash;
+    }
 }

@@ -13,9 +13,8 @@ class LocalFilesHashSeeder extends Seeder
     public function run()
     {
         $items = LocalFile::whereNull('hash')->get();
-        foreach ($items as $item)
-        {
-            $item->hash = $item->makeHash();
+        foreach ($items as $item) {
+            $item->hash = $item->generateHash();
             $item->save();
         }
     }

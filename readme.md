@@ -48,6 +48,8 @@ Option | Type | Description | Default
 ------ | ---- | ----------- | -------
 routes | Boolean | Determines whether or not to automatically define filer's routes. If you set this to `false`, you can optionally use `\TeamTeaTime\Filer\Filer::routes($router, $namespace)` in your routes.php. | true
 route_prefix | string | If routes are enabled, this is used for all route prefixes. | files
+hash_routes | Boolean | Enables unique hashes for local files to obfuscate their IDs in routes. | false
+hash_length | string | The length to use when generating hashes for local files. | 40
 path | Array | Contains the relative and absolute paths to the directory where your attachment files are stored. | storage_path('uploads')
 append_querystring | Boolean | If enabled, attachment URLs include a querystring containing the attachment's updated_at timestamp. This prevents out of date attachments from being loaded by the browser. | true
 cleanup_on_delete | Boolean | If enabled, Filer will attempt to delete local files referenced by deleted attachments. | true
@@ -128,13 +130,14 @@ $avatar->item->path;        // the path to the directory where the file exists
 $avatar->item->mimetype;    // the file's detected MIME type
 $avatar->item->size;        // the file size, in bytes
 $avatar->item->getFile();   // the Symfony File representation of the file
+$avatar->item->hash;        // the unique hash generated for the file (if filer.hash_routes is enabled)
 ```
 
 ### Generating URLs
 
 The `getUrl()` and `getDownloadUrl()` methods above will return different values based on the attachment type; if it's a local file, they will return the 'view' and 'download' routes respectively, otherwise they'll return the URL that was attached.
 
-For local files, the provided routes can be generated with a file ID:
+For local files, the provided routes can be generated with a file ID or hash:
 
 ```php
 route('filer.file.view', $fileId);
