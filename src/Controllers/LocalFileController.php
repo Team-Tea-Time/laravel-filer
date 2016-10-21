@@ -33,6 +33,6 @@ class LocalFileController extends Controller
     public function download($id)
     {
         $file = LocalFile::getByIdentifier($id);
-        return response()->download($file->getAbsolutePath());
+        return response()->download($file->getAbsolutePath(), $file->getDownloadName());
     }
 }

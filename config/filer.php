@@ -88,4 +88,15 @@ return [
 
     'cleanup_on_delete' => true,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Download attribute
+    |--------------------------------------------------------------------------
+    |
+    | The attribute to use when downloading a local file.
+    | Can be one of: `key`, `title`, `description`, `filename`.
+    */
+
+    'download_attribute' => 'filename',
+
 ];
