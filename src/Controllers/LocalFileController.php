@@ -28,6 +28,7 @@ class LocalFileController extends Controller
      * Return a download response for the specified file.
      *
      * @param  int  $id
+     * @param  boolean  $deleteAfterDownload
      * @return \Illuminate\Http\Response
      */
     public function download($id, $deleteAfterDownload = false)
