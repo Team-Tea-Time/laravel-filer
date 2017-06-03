@@ -28,11 +28,12 @@ class LocalFileController extends Controller
      * Return a download response for the specified file.
      *
      * @param  int  $id
+     * @param  boolean  $deleteAfterDownload
      * @return \Illuminate\Http\Response
      */
-    public function download($id)
+    public function download($id, $deleteAfterDownload = false)
     {
         $file = LocalFile::getByIdentifier($id);
-        return response()->download($file->getAbsolutePath());
+        return response()->download($file->getAbsolutePath())->deleteFileAfterSend($deleteAfterDownload);
     }
 }
