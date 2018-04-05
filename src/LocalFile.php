@@ -104,6 +104,20 @@ class LocalFile extends BaseItem
     }
 
     /**
+     * Get the item's download name.
+     *
+     * @return string
+     */
+    public function getDownloadName()
+    {
+        if (array_key_exists(config('filer.download_attribute'), $this->attributes)) {
+            return $this->{config('filer.download_attribute')};
+        }
+
+        return $this->filename;
+    }
+
+    /**
      * Construct a filepath.
      *
      * @param  string  $path
